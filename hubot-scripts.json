@@ -1,6 +1,6 @@
 [
   "redis-brain.coffee",
-  "serenity.coffee"
+  "serenity.coffee",
   "shipit.coffee",
   "xkcd.coffee"
 ]
