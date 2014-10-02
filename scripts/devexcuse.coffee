@@ -8,12 +8,13 @@
 # Commands:
 #   hubot excuse me
 
-cheerio = require 'cheerio'
-
 module.exports = (robot) ->
   robot.respond /excuse me/i, (msg) ->
-    robot.http("http://developerexcuses.com/")
+    robot.http("http://developerexcuses.com")
       .get() (err, res, body) ->
-        $ = cheerio.load(body)
+        matches = body.match /<a [^>]+>(.+)<\/a>/i
 
-        msg.send $('.wrapper a').text()
+        if matches and matches[1]
+          msg.send matches[1]
+        else
+          msg.send "I thought I finished that"
