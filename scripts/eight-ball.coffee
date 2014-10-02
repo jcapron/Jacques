@@ -34,6 +34,7 @@ ball = [
   "My sources say no",
   "Outlook not so good",
   "Very doubtful",
+  "Nope"
 ]
 
 module.exports = (robot) ->
