@@ -32,5 +32,5 @@ module.exports = (robot) ->
         hello = msg.random mornings
         msg.send hello.replace "%", msg.message.user.name
 
-    robot.hear /hellooo/, (msg) ->
+    robot.hear /hellooo+/i, (msg) ->
         msg.send "http://cl.ly/Xq1K/HELLO5-2.gif"
