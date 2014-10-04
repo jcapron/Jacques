@@ -2,7 +2,7 @@
 #   Make sure that hubot shares the ruby rules.
 #
 # Commands:
-#   hubot the ruby rules - Make hubot explain how to write practical ruby.
+#   hubot the ruby rules - Makes hubot explain how to write practical ruby.
 #
 # Notes:
 #   These rules were provided by Sandy Metz in the Ruby Rouges podcast:

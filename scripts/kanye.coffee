@@ -8,6 +8,7 @@
 #   None
 #
 # Commands:
+#   kanye - Gives a random quote from Kanye
 #
 # Author:
 #   jcapron

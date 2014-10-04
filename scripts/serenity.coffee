@@ -8,6 +8,7 @@
 #   None
 #
 # Commands:
+#   serenity - Serenity now!
 #
 # Author:
 #   madtimber

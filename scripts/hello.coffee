@@ -10,6 +10,7 @@
 # Commands:
 #   Hello or Good Day make hubot say hello to you back
 #   Good Morning makes hubot say good morning to you back
+
 hellos = [
     "Well hello there, %",
     "Hey %, Hello!",

@@ -8,6 +8,7 @@
 #   None
 #
 # Commands:
+#   do it live - F*ck it, we'll do it live!
 #
 # Author:
 #   stewart

@@ -8,7 +8,7 @@
 #   None
 #
 # Commands:
-#   hubot ruby|rb <script> - Evaluate one line of Ruby script
+#   hubot ruby|rb <script> - Evaluates one line of Ruby script
 #
 # Author:
 #   jingweno

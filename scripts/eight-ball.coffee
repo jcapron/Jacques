@@ -8,7 +8,7 @@
 #   None
 #
 # Commands:
-#   hubot eightball <query> - Ask the magic eight ball a question
+#   hubot eightball|8ball <query> - Asks the magic eight ball a question
 #
 # Author:
 #   ryanatwork

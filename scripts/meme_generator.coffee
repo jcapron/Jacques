@@ -33,9 +33,9 @@
 #   hubot memegen WHAT IF I TOLD YOU <text> - Generates Morpheus
 #   hubot memegen <text> BETTER DRINK MY OWN PISS - Generates Bear Grylls
 #   hubot memegen INTERNET KID <text>, <text> - Generates First-day-on-the-Internet Kid
+#
 # Author:
 #   skalnik
-
 
 inspect = require('util').inspect
 

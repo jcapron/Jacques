@@ -8,7 +8,10 @@
 #   HUBOT_PINCHME_API_TOKEN: access token to PINCHme API
 #
 # Commands:
-#   hubot how many users - Give the total of users
+#   hubot how many users - Gives the total of PINCHme users
+#
+# Author:
+#   jcapron
 
 module.exports = (robot) ->
 

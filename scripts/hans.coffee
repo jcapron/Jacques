@@ -8,7 +8,7 @@
 #   None
 #
 # Commands:
-#   Hans?
+#   Hans? - Gives a random Hans gif
 
 hanses = [  "http://media.tumblr.com/tumblr_le0zo9IfWm1qcig1w.gif",
             "http://26.media.tumblr.com/tumblr_lwtb64vrVf1qdau9mo1_500.gif",

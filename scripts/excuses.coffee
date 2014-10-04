@@ -1,13 +1,10 @@
 # Description:
-#   Dev excuses scraper. From http://developerexcuses.com/
-#
-# Dependencies:
-#
-#   "cheerio": "~0.12.0"
+#   Gets a random developer, designer and manager excuses
 #
 # Commands:
-#   hubot excuse me - gives a developer excuse
-#   hubot designer excuse - gives a designer excuse
+#   hubot excuse me|developer excuse - Gives a developer excuse
+#   hubot designer excuse - Gives a designer excuse
+#   hubot manager excuse - Gives a manager excuse
 
 DESIGNER_EXCUSES = [
   "That won't fit the grid.",
@@ -40,7 +37,7 @@ DESIGNER_EXCUSES = [
 ]
 
 module.exports = (robot) ->
-  robot.respond /excuse me/i, (msg) ->
+  robot.respond /excuse me|\bdeveloper excuse\b/i, (msg) ->
     robot.http("http://developerexcuses.com")
       .get() (err, res, body) ->
         matches = body.match /<a [^>]+>(.+)<\/a>/i
