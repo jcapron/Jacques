@@ -52,3 +52,13 @@ module.exports = (robot) ->
 
   robot.respond /\bdesigner excuse\b/i, (msg) ->
     msg.send msg.random(DESIGNER_EXCUSES)
+
+  robot.respond /\bmanager excuse\b/i, (msg) ->
+    robot.http("http://accountmanagerexcuses.com/")
+      .get() (err, res, body) ->
+        matches = body.match /<a [^>]+>(.+)<\/a>/i
+
+        if matches and matches[1]
+          msg.send matches[1]
+        else
+          msg.send "I thought I finished that"
