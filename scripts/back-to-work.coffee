@@ -40,4 +40,4 @@ module.exports = (robot) ->
     if (@recentMessageTimes.length >= THROTTLE_MESSAGE_LIMIT)
       msg.send 'Back to work!'
       msg.send msg.random images
-      process.exit 0
+      @messageTimes = [] # Clear the existing tracked message times
