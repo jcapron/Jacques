@@ -30,7 +30,7 @@ images = [  'http://identitymagazine.net/wp-content/uploads/2010/11/BACKTOWORKLO
 
 module.exports = (robot) ->
   robot.hear /.*/i, (msg) ->
-    
+
     now = (new Date).getTime();
     windowStart = now - THROTTLE_WINDOW_IN_MILLIS
     @messageTimes ||= []
@@ -38,6 +38,6 @@ module.exports = (robot) ->
     @recentMessageTimes = @messageTimes.filter (messageTime) -> messageTime > windowStart
 
     if (@recentMessageTimes.length >= THROTTLE_MESSAGE_LIMIT)
-      msg.send 'Back to work!'
+      msg.send "Back to work, " + msg.message.user.name + "!"
       msg.send msg.random images
       @messageTimes = [] # Clear the existing tracked message times
