@@ -29,7 +29,7 @@ images = [  'http://identitymagazine.net/wp-content/uploads/2010/11/BACKTOWORKLO
 ]
 
 module.exports = (robot) ->
-  robot.hear /.*/i, (msg) ->
+  robot.respond /.*/i, (msg) ->
 
     now = (new Date).getTime();
     windowStart = now - THROTTLE_WINDOW_IN_MILLIS
