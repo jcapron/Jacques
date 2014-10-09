@@ -23,12 +23,25 @@ module.exports = (robot) ->
   numberWithCommas = (x) ->
     x.toString().replace /\B(?=(\d{3})+(?!\d))/g, ","
 
+  printHtmlTable = (table) ->
+    result = "<table>"
+    for row, i in table
+      result = result + "<tr>"
+      for column, j in table[i]
+        if i == 0
+          result = result + "<td><b>" + encodeURIComponent(table[i][j]).replace(/'/, '') + "</b></td>"
+        else
+          result = result + "<td>" + encodeURIComponent(table[i][j]).replace(/'/, '') + "</td>"
+      result = result + "</tr>"
+    result = result + "</table>"
+    result
+
   robot.respond /how many users/i, (msg) ->
     pm_url = pm_base_url + "users/population?access_token=" + pm_access_token
     msg.http(pm_url)
       .get() (err, res, body) ->
         total = JSON.parse(body).number
-        response = "There are " + numberWithCommas(total) + " users!"
+        response = "There are #{numberWithCommas(total)} users!"
         msg.send response
 
   robot.respond /gender breakdown/i, (msg) ->
@@ -38,8 +51,8 @@ module.exports = (robot) ->
         male = JSON.parse(body).chart[0].value
         female = 100 - male
         response = "Gender breakdown:\n" +
-        "- Female: " + Math.round(female) + "%\n" +
-        "- Male: " + Math.round(male) + "%"
+        "- Female: #{Math.round(female)}%\n" +
+        "- Male: #{Math.round(male)}%"
         msg.send response
 
   robot.respond /age breakdown/i, (msg) ->
@@ -55,10 +68,109 @@ module.exports = (robot) ->
         _65_plus = json.chart[5].value
         total = _16_24 + _25_34 + _35_44 + _45_54 + _55_64 + _65_plus
         response = "Age breakdown:\n" +
-        "- 16-24: " + Math.round(_16_24*100/total) + "%\n" +
-        "- 25-34: " + Math.round(_25_34*100/total) + "%\n" +
-        "- 35-44: " + Math.round(_35_44*100/total) + "%\n" +
-        "- 45-54: " + Math.round(_45_54*100/total) + "%\n" +
-        "- 55-64: " + Math.round(_55_64*100/total) + "%\n" +
-        "- 65+: " + Math.round(_65_plus*100/total) + "%"
+        "- 16-24: #{Math.round(_16_24*100/total)}%\n" +
+        "- 25-34: #{Math.round(_25_34*100/total)}%\n" +
+        "- 35-44: #{Math.round(_35_44*100/total)}%\n" +
+        "- 45-54: #{Math.round(_45_54*100/total)}%\n" +
+        "- 55-64: #{Math.round(_55_64*100/total)}%\n" +
+        "- 65+: #{Math.round(_65_plus*100/total)}%"
+        msg.send response
+
+  robot.respond /active users breakdown/i, (msg) ->
+    pm_url = pm_base_url + "users/mobile_verified_breakdown?access_token=" + pm_access_token
+    msg.http(pm_url)
+      .get() (err, res, body) ->
+        json = JSON.parse(body)
+        mobile_verified_total = json.chart[0].value
+        mobile_verified_ordered_past_month = json.chart[1].value
+        mobile_verified_signed_in_past_month = json.chart[2].value
+        response = "Active users breakdown:\n" +
+        "- Total: #{numberWithCommas(mobile_verified_total)}\n" +
+        "- Ordered past month: #{numberWithCommas(mobile_verified_ordered_past_month)}\n" +
+        "- Signed in past month: #{numberWithCommas(mobile_verified_signed_in_past_month)}"
+        msg.send response
+
+  robot.respond /sample breakdown/i, (msg) ->
+    pm_url = pm_base_url + "conversions/live_campaign_sample_breakdown?access_token=" + pm_access_token
+    msg.http(pm_url)
+      .get() (err, res, body) ->
+        json = JSON.parse(body)
+        table = json.table
+        response = printHtmlTable(table)
+        msg.send "Inventory breakdown:\n" + response
+
+  robot.respond /items per box/i, (msg) ->
+    pm_url = pm_base_url + "conversions/samples_per_box_breakdown?access_token=" + pm_access_token
+    msg.http(pm_url)
+      .get() (err, res, body) ->
+        json = JSON.parse(body)
+        table = json.table
+        response = printHtmlTable(table)
+        msg.send "Samples per box for current campaigns:\n" + response
+
+  robot.respond /advanced profiles completed/i, (msg) ->
+    pm_url = pm_base_url + "conversions/profiles_complete?access_token=" + pm_access_token
+    msg.http(pm_url)
+      .get() (err, res, body) ->
+        json = JSON.parse(body)
+        total = JSON.parse(body).number
+        response = "#{numberWithCommas(total)} advanced profiles completed overall"
+        msg.send response
+
+  robot.respond /samples claimed/i, (msg) ->
+    pm_url = pm_base_url + "conversions/samples_claimed?access_token=" + pm_access_token
+    msg.http(pm_url)
+      .get() (err, res, body) ->
+        json = JSON.parse(body)
+        total = JSON.parse(body).number
+        response = "#{numberWithCommas(total)} samples claimed"
+        msg.send response
+
+  robot.respond /boxes ordered/i, (msg) ->
+    pm_url = pm_base_url + "conversions/boxes_ordered?access_token=" + pm_access_token
+    msg.http(pm_url)
+      .get() (err, res, body) ->
+        json = JSON.parse(body)
+        total = JSON.parse(body).number
+        response = "#{numberWithCommas(total)} boxes ordered"
+        msg.send response
+
+  robot.respond /surveys completed/i, (msg) ->
+    response = ""
+    pm_url = pm_base_url + "conversions/survey_completion_percentage?access_token=" + pm_access_token
+    msg.http(pm_url)
+      .get() (err, res, body) ->
+        json = JSON.parse(body)
+        total = JSON.parse(body).number
+        response = "- #{Math.round(total)}% surveys completed\n"
+        pm_url = pm_base_url + "conversions/surveys_complete_timeline?access_token=" + pm_access_token
+        msg.http(pm_url)
+          .get() (err, res, body) ->
+            json = JSON.parse(body)
+            total = JSON.parse(body)[0].number
+            response = response + "- #{numberWithCommas(total)} surveys completed\n"
+            pm_url = pm_base_url + "conversions/surveys_incomplete_timeline?access_token=" + pm_access_token
+            msg.http(pm_url)
+              .get() (err, res, body) ->
+                json = JSON.parse(body)
+                total = JSON.parse(body)[0].number
+                response = response + "- #{numberWithCommas(total)} surveys incompleted"
+                msg.send response
+
+  robot.respond /did you buy breakdown/i, (msg) ->
+    pm_url = pm_base_url + "conversions/did_you_buy_breakdown?access_token=" + pm_access_token
+    msg.http(pm_url)
+      .get() (err, res, body) ->
+        json = JSON.parse(body)
+        not_responded = json.chart[0].value
+        yeses = json.chart[1].value
+        nos = json.chart[2].value
+        maybes = json.chart[3].value
+        total = not_responded + yeses + nos + maybes
+        response = "Did you buy breakdown:\n" +
+        "- Yes: #{numberWithCommas(yeses)}\n" +
+        "- Maybe: #{numberWithCommas(maybes)}\n" +
+        "- No: #{numberWithCommas(nos)}\n" +
+        "- Not answered: #{numberWithCommas(not_responded)}\n" +
+        "- Total: #{numberWithCommas(nos)}"
         msg.send response
