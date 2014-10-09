@@ -8,9 +8,17 @@
 #   HUBOT_PINCHME_API_TOKEN: access token to PINCHme API
 #
 # Commands:
-#   hubot how many users - Gives the total of PINCHme users
-#   hubot age breakdown - Gives the age breakdown
+#   hubot how many users - Gives the total of users
 #   hubot gender breakdown - Gives the gender breakdown
+#   hubot age breakdown - Gives the age breakdown
+#   hubot active users breakdown - Gives the active users breakdown
+#   hubot sample breakdown - Gives the sample breakdown
+#   hubot items per box - Gives the items per box breakdown
+#   hubot advanced profiles completed - Gives the number of advanced profiles completed
+#   hubot samples claimed - Gives the number of  samples claimed
+#   hubot boxes ordered - Gives the number of boxes ordered
+#   hubot surveys completed - Gives the surveys breakdown
+#   hubot did you buy breakdown - Gives the did you buy breakdown
 #
 # Author:
 #   jcapron
