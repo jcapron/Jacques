@@ -114,7 +114,7 @@ module.exports = (robot) ->
         json = JSON.parse(body)
         table = json.table
         response = printHtmlTable(table)
-        curlThis("Inventory breakdown:\n" + response, msg.message.room)
+        curlThis("Inventory breakdown:\n" + response, encodeURIComponent(msg.message.room))
 
   robot.respond /(how many )?items per box/i, (msg) ->
     pm_url = pm_base_url + "conversions/samples_per_box_breakdown?access_token=" + pm_access_token
@@ -123,7 +123,7 @@ module.exports = (robot) ->
         json = JSON.parse(body)
         table = json.table
         response = printHtmlTable(table)
-        curlThis("Samples per box for current campaigns:\n" + response, msg.message.room)
+        curlThis("Samples per box for current campaigns:\n" + response, encodeURIComponent(msg.message.room))
 
   robot.respond /(how many )?advanced profiles completed/i, (msg) ->
     pm_url = pm_base_url + "conversions/profiles_complete?access_token=" + pm_access_token
