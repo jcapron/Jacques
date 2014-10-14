@@ -12,8 +12,8 @@
 #   hubot gender breakdown - Gives the gender breakdown
 #   hubot age breakdown - Gives the age breakdown
 #   hubot active users breakdown - Gives the active users breakdown
-#   hubot sample breakdown - Gives the sample breakdown
-#   hubot items per box - Gives the items per box breakdown
+#   hubot sample breakdown - Gives the sample breakdown (only works in a room, not in private conversations)
+#   hubot items per box - Gives the items per box breakdown (only works in a room, not in private conversations)
 #   hubot advanced profiles completed - Gives the number of advanced profiles completed
 #   hubot samples claimed - Gives the number of  samples claimed
 #   hubot boxes ordered - Gives the number of boxes ordered
@@ -51,7 +51,7 @@ module.exports = (robot) ->
       return
     sys = require("sys")
     exec = require("child_process").exec
-    if room == "pinchme" then
+    if room == "pinchme"
       room = "PINCHme+Tech+Team"
     exec "curl -X POST --data 'auth_token=#{hipchat_token}&room_id=#{room}&from=Jacques&message_format=html&message=#{message}' https://api.hipchat.com/v1/rooms/message", puts
 
