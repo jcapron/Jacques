@@ -51,6 +51,8 @@ module.exports = (robot) ->
       return
     sys = require("sys")
     exec = require("child_process").exec
+    if room == "pinchme" then
+      room = "PINCHme+Tech+Team"
     exec "curl -X POST --data 'auth_token=#{hipchat_token}&room_id=#{room}&from=Jacques&message_format=html&message=#{message}' https://api.hipchat.com/v1/rooms/message", puts
 
   robot.respond /how many users/i, (msg) ->
