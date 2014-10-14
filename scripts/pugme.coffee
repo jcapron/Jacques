@@ -9,7 +9,6 @@
 #
 # Commands:
 #   hubot pug me - Receives a pug
-#   hubot pug bomb N - Gets N pugs
 
 module.exports = (robot) ->
 

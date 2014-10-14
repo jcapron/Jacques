@@ -44,6 +44,15 @@ module.exports = (robot) ->
     result = result + "</table>"
     result
 
+  curlThis = (message, room) ->
+    hipchat_token = process.env.HUBOT_HIPCHAT_AUTH_TOKEN
+    puts = ( error, stdout, stderr) ->
+      sys.puts stdout
+      return
+    sys = require("sys")
+    exec = require("child_process").exec
+    exec "curl -X POST --data 'auth_token=#{hipchat_token}&room_id=#{room}&from=Jacques&message_format=html&message=#{message}' https://api.hipchat.com/v1/rooms/message", puts
+
   robot.respond /how many users/i, (msg) ->
     pm_url = pm_base_url + "users/population?access_token=" + pm_access_token
     msg.http(pm_url)
@@ -105,18 +114,18 @@ module.exports = (robot) ->
         json = JSON.parse(body)
         table = json.table
         response = printHtmlTable(table)
-        msg.send "Inventory breakdown:\n" + response
+        curlThis("Inventory breakdown:\n" + response, msg.message.room)
 
-  robot.respond /items per box/i, (msg) ->
+  robot.respond /(how many )?items per box/i, (msg) ->
     pm_url = pm_base_url + "conversions/samples_per_box_breakdown?access_token=" + pm_access_token
     msg.http(pm_url)
       .get() (err, res, body) ->
         json = JSON.parse(body)
         table = json.table
         response = printHtmlTable(table)
-        msg.send "Samples per box for current campaigns:\n" + response
+        curlThis("Samples per box for current campaigns:\n" + response, msg.message.room)
 
-  robot.respond /advanced profiles completed/i, (msg) ->
+  robot.respond /(how many )?advanced profiles completed/i, (msg) ->
     pm_url = pm_base_url + "conversions/profiles_complete?access_token=" + pm_access_token
     msg.http(pm_url)
       .get() (err, res, body) ->
@@ -125,7 +134,7 @@ module.exports = (robot) ->
         response = "#{numberWithCommas(total)} advanced profiles completed overall"
         msg.send response
 
-  robot.respond /samples claimed/i, (msg) ->
+  robot.respond /(how many )?samples claimed/i, (msg) ->
     pm_url = pm_base_url + "conversions/samples_claimed?access_token=" + pm_access_token
     msg.http(pm_url)
       .get() (err, res, body) ->
@@ -134,7 +143,7 @@ module.exports = (robot) ->
         response = "#{numberWithCommas(total)} samples claimed"
         msg.send response
 
-  robot.respond /boxes ordered/i, (msg) ->
+  robot.respond /(how many )?boxes ordered/i, (msg) ->
     pm_url = pm_base_url + "conversions/boxes_ordered?access_token=" + pm_access_token
     msg.http(pm_url)
       .get() (err, res, body) ->
@@ -143,7 +152,7 @@ module.exports = (robot) ->
         response = "#{numberWithCommas(total)} boxes ordered"
         msg.send response
 
-  robot.respond /surveys completed/i, (msg) ->
+  robot.respond /(how many )?surveys completed/i, (msg) ->
     response = ""
     pm_url = pm_base_url + "conversions/survey_completion_percentage?access_token=" + pm_access_token
     msg.http(pm_url)
