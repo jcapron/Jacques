@@ -195,7 +195,11 @@ module.exports = (robot) ->
         "- Total: #{numberWithCommas(nos)}"
         msg.send response
 
+  getEmailFromUser = (name) ->
+    name[0].toLowerCase() + name.split(" ")[1].toLowerCase() + "@pinch.me"
+
   robot.respond /wishlist breakdown/i, (msg) ->
+    email = getEmailFromUser(msg.message.user.name)
     msg.send "Let me fetch the data..."
     pm_url = process.env.PM_WISHLIST
     msg.http(pm_url)
@@ -212,8 +216,8 @@ module.exports = (robot) ->
           from_email: "no-reply-to-Jacques@hipchat.com"
           from_name: "Jacques Bot"
           to: [
-            email: "jcapron@pinch.me"
-            name: "Julien Capron"
+            email: email
+            name: msg.message.user.name
             type: "to"
           ]
           attachments: [
@@ -236,8 +240,9 @@ module.exports = (robot) ->
 
   robot.respond /users promo (.+)/i, (msg) ->
     if msg.match[1] != "17" && msg.match[1] != "9"
-      msg.send "Nope."
+      msg.send "Nope. It works only with 9 and 17 for now!"
       return
+    email = getEmailFromUser(msg.message.user.name)
     msg.send "Let me fetch the data..."
     pm_url = process.env.PM_USERS_PROMO + msg.match[1]
 
@@ -254,8 +259,8 @@ module.exports = (robot) ->
           from_email: "no-reply-to-Jacques@hipchat.com"
           from_name: "Jacques Bot"
           to: [
-            email: "jcapron@pinch.me"
-            name: "Julien Capron"
+            email: email
+            name: msg.message.user.name
             type: "to"
           ]
           attachments: [
