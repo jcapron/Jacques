@@ -2,7 +2,7 @@
 #   PINCHme stats
 #
 # Dependencies:
-#   None
+#   "mandrill-api":">=1.0.2"
 #
 # Configuration:
 #   HUBOT_PINCHME_API_TOKEN: access token to PINCHme API
@@ -194,3 +194,95 @@ module.exports = (robot) ->
         "- Not answered: #{numberWithCommas(not_responded)}\n" +
         "- Total: #{numberWithCommas(nos)}"
         msg.send response
+
+  robot.respond /wishlist breakdown/i, (msg) ->
+    msg.send "Let me fetch the data..."
+    pm_url = process.env.PM_WISHLIST
+    msg.http(pm_url)
+      .get() (err, res, body) ->
+        json = JSON.parse(body)
+        res = json.res
+
+        msg.send "Got it! An email should arrive shortly."
+        mandrill = require 'mandrill-api/mandrill'
+        mandrill_client = new mandrill.Mandrill(process.env.MANDRILL_APIKEY)
+        message =
+          html: "<p>Here is the wishlist breakdown.</p>"
+          subject: "Wishlist breakdown"
+          from_email: "no-reply-to-Jacques@hipchat.com"
+          from_name: "Jacques Bot"
+          to: [
+            email: "elniafron62@gmail.com"
+            name: "Julien Capron"
+            type: "to"
+          ]
+          attachments: [
+            type: "text/csv"
+            name: "wishlist.csv"
+            content: res
+          ]
+        async = false
+        mandrill_client.messages.send
+          message: message
+          async: async
+        , ((result) ->
+          msg.send "Email sent!"
+          console.log result
+          return
+        ), (e) ->
+          # Mandrill returns the error as an object with name and message keys
+          console.log "A mandrill error occurred: " + e.name + " - " + e.message
+          return
+
+  robot.respond /users promo (.+)/i, (msg) ->
+    if msg.match[1] != "17" && msg.match[1] != "9"
+      msg.send "Nope."
+      return
+    msg.send "Let me fetch the data..."
+    pm_url = process.env.PM_USERS_PROMO + msg.match[1]
+
+    msg.http(pm_url)
+      .get() (err, res, body) ->
+        json = JSON.parse(body)
+        res = json.res
+        msg.send "Got it! An email should arrive shortly."
+        mandrill = require 'mandrill-api/mandrill'
+        mandrill_client = new mandrill.Mandrill(process.env.MANDRILL_APIKEY)
+        message =
+          html: "<p>Here are the users who ordered promo #{msg.match[1]}.</p>"
+          subject: "Users promo #{msg.match[1]}"
+          from_email: "no-reply-to-Jacques@hipchat.com"
+          from_name: "Jacques Bot"
+          to: [
+            email: "elniafron62@gmail.com"
+            name: "Julien Capron"
+            type: "to"
+          ]
+          attachments: [
+            type: "text/csv"
+            name: "users_promo.csv"
+            content: res
+          ]
+        async = false
+        mandrill_client.messages.send
+          message: message
+          async: async
+        , ((result) ->
+          msg.send "Email sent!"
+          console.log result
+          return
+        ), (e) ->
+          # Mandrill returns the error as an object with name and message keys
+          console.log "A mandrill error occurred: " + e.name + " - " + e.message
+          return
+
+  robot.respond /current users/i, (msg) ->
+    pm_url = process.env.PM_CURRENT_USERS
+    msg.send "Let me count..."
+    msg.send "1... 2..."
+    msg.http(pm_url)
+      .get() (err, res, body) ->
+        json = JSON.parse(body)
+        res = json.res
+
+        msg.send "There are #{numberWithCommas(res)} pinchers on the site."
