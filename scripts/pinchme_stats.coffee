@@ -195,34 +195,94 @@ module.exports = (robot) ->
         "- Total: #{numberWithCommas(nos)}"
         msg.send response
 
-  robot.respond /mandrill/i, (msg) ->
-    mandrill = require 'mandrill-api/mandrill'
-    mandrill_client = new mandrill.Mandrill(process.env.MANDRILL_APIKEY)
-    file_content = "IjIwMDktMDMtMDQiLCJMb2RnaW5nIiwiIEZhaXJmaWVsZCBJbm4gQ2hpY2Fn\nbyIsIjExMC44OCIsIiIsIjM2IiwiSm9lVGVjaCAiLCIxMTExIC0gV0YgUGVy\nc29uYWwgQ3JlZGl0IgoiMjAwOS0wMy0wNCIsIlJlbnRhbCBDYXJzIiwiIEFj\nZSBSZW50LWEtY2FyIENoaWNhZ28iLCI4MC40OSIsIiIsIjM2IiwiSm9lVGVj\naCAiLCIxMTExIC0gV0YgUGVyc29uYWwgQ3JlZGl0IgoiMjAwOS0wMy0wNCIs\nIlNvZnR3YXJlIiwiIEppbmcgUHJvIiwiMTQuOTUiLCIiLCIiLCIgIiwiMTEx\nMSAtIFdGIFBlcnNvbmFsIENyZWRpdCIKIjIwMDktMDMtMTAiLCJSZW50YWwg\nQ2FycyIsIiBFbnRlcnByaXNlIC0gVVRIU0NBIiwiMTEwLjk3IiwiIiwiMzYi\nLCJKb2VUZWNoICIsIjExMTEgLSBXRiBQZXJzb25hbCBDcmVkaXQiCiIyMDA5\nLTAzLTEwIiwiTG9kZ2luZyIsIiBGYWlyZmllbGQgSW5uIC0gVVRIU0NBIiwi\nMTQwLjA0IiwiIiwiMzYiLCJKb2VUZWNoICIsIjExMTEgLSBXRiBQZXJzb25h\nbCBDcmVkaXQiCiIyMDA5LTAzLTEwIiwiQ2VsbCBQaG9uZSIsIiBTcHJpbnQi\nLCIxMDguMzYiLCIiLCIiLCIgIiwiMTExMSAtIFdGIFBlcnNvbmFsIENyZWRp\ndCIKIjIwMDktMDMtMTQiLCJXZWIgRG9tYWlucyIsIiAxLW1vbnRoIGhvc3Rp\nbmcgcmVuZXdhbCIsIjYuOTkiLCIiLCIiLCIgIiwiNzk1MiAtIFdGIFBlcnNv\nbmFsIENoZWNraW5nIgoiMjAwOS0wMy0xOCIsIkxvZGdpbmciLCIgTXlzdGlj\nIGxha2UgaG90ZWwiLCIxNDkuMTAiLCIiLCIzOSIsIkpvZVRlY2ggIiwiMTEx\nMSAtIFdGIFBlcnNvbmFsIENyZWRpdCIKIjIwMDktMDMtMTgiLCJSZW50YWwg\nQ2FycyIsIiBBZHZhbnRhZ2UiLCIxODkuODYiLCIiLCIzOSIsIkpvZVRlY2gg\nIiwiMTExMSAtIFdGIFBlcnNvbmFsIENyZWRpdCIKIjIwMDktMDMtMTgiLCJG\ndWVsIiwiIFN1cGVyYW1lcmljYSIsIjMuOTciLCIiLCIzOSIsIkpvZVRlY2gg\nIiwiMTExMSAtIFdGIFBlcnNvbmFsIENyZWRpdCIKIjIwMDktMDMtMTkiLCJG\nbGlnaHRzIiwiIFVTIEFpcndheXMgUGV0ZXJzb24gLSBDb3BwZXIgUXVlZW4i\nLCI0ODguNjAiLCIiLCIzOCIsIkpvZVRlY2ggIiwiMTExMSAtIFdGIFBlcnNv\nbmFsIENyZWRpdCIKIjIwMDktMDMtMjUiLCJMb2RnaW5nIiwiIFNwcmluZ2hp\nbGwgc3VpdGVzIiwiMjMxLjE2IiwiIiwiMzkiLCJKb2VUZWNoICIsIjExMTEg\nLSBXRiBQZXJzb25hbCBDcmVkaXQiCiIyMDA5LTAzLTI1IiwiUmVudGFsIENh\ncnMiLCIgRG9sbGFyIiwiMTE4LjE3IiwiIiwiMzkiLCJKb2VUZWNoICIsIjEx\nMTEgLSBXRiBQZXJzb25hbCBDcmVkaXQiCiIyMDA5LTAzLTI2IiwiTG9kZ2lu\nZyIsIiBGYWlyZmllbGQgSW5uIiwiMTQzLjkwIiwiIiwiMzkiLCJKb2VUZWNo\nICIsIjExMTEgLSBXRiBQZXJzb25hbCBDcmVkaXQiCiIyMDA5LTAzLTI3Iiwi\nTG9kZ2luZyIsIiBGYWlyZmllbGQgSW5uIiwiMTExLjkzIiwiIiwiMzkiLCJK\nb2VUZWNoICIsIjExMTEgLSBXRiBQZXJzb25hbCBDcmVkaXQiCiIyMDA5LTAz\nLTI3IiwiRnVlbCIsIiBWYWxlcm8gQ29ybmVyIFN0b3JlIiwiOC42MSIsIiIs\nIjM5IiwiSm9lVGVjaCAiLCIxMTExIC0gV0YgUGVyc29uYWwgQ3JlZGl0Igoi\nMjAwOS0wMy0yNyIsIlJlbnRhbCBDYXJzIiwiIEFsYW1vIiwiMTM2LjM1Iiwi\nIiwiMzkiLCJKb2VUZWNoICIsIjExMTEgLSBXRiBQZXJzb25hbCBDcmVkaXQi\nCiIyMDA5LTAzLTI4IiwiRWxlY3Ryb25pY3MiLCIgTXkgQm9vayBFeHRlcm5h\nbCBIYXJkIERyaXZlIiwiMTI4LjIxIiwiIiwiIiwiICIsIjExMTEgLSBXRiBQ\nZXJzb25hbCBDcmVkaXQiCiIyMDA5LTAzLTI4IiwiVHJhbnNwb3J0YXRpb24i\nLCIgMTUxMiBNaWxlcyB0byBTTEMgQWlycG9ydCBAICQwLjQyIiwiNjM1LjA0\nIiwiIiwiMzkiLCJKb2VUZWNoICIsIm4vYSIKIjIwMDktMDMtMzEiLCJGbGln\naHRzIiwiIERlbHRhIC0gRlNQIiwiODQ1LjkwIiwiIiwiNDIiLCJKb2VUZWNo\nICIsIjExMTEgLSBXRiBQZXJzb25hbCBDcmVkaXQiCiIyMDA5LTAzLTMxIiwi\nSGVhbHRoIEluc3VyYW5jZSIsIiBzZWxlY3RoZWFsdGggcHJlbWl1bSIsIjg1\nOC4wMCIsIiIsIiIsIiAiLCIwNTc5IC0gV0YgQnVzaW5lc3MgQ2hlY2tpbmci\nCg==\n"
-    message =
-      html: "<p>Example HTML content</p>"
-      subject: "example subject"
-      from_email: "no-reply-to-Jacques@hipchat.com"
-      from_name: "Jacques Bot"
-      to: [
-        email: "elniafron62@gmail.com"
-        name: "Julien Capron"
-        type: "to"
-      ]
-      # get encoded content from ruby side
-      attachments: [
-        type: "text/csv"
-        name: "example.csv"
-        content: file_content
-      ]
-    async = false
-    mandrill_client.messages.send
-      message: message
-      async: async
-    , ((result) ->
-      console.log result
+  robot.respond /wishlist breakdown/i, (msg) ->
+    msg.send "Let me fetch the data..."
+    pm_url = process.env.PM_WISHLIST
+    msg.http(pm_url)
+      .get() (err, res, body) ->
+        json = JSON.parse(body)
+        res = json.res
+
+        msg.send "Got it! An email should arrive shortly."
+        mandrill = require 'mandrill-api/mandrill'
+        mandrill_client = new mandrill.Mandrill(process.env.MANDRILL_APIKEY)
+        message =
+          html: "<p>Here is the wishlist breakdown.</p>"
+          subject: "Wishlist breakdown"
+          from_email: "no-reply-to-Jacques@hipchat.com"
+          from_name: "Jacques Bot"
+          to: [
+            email: "elniafron62@gmail.com"
+            name: "Julien Capron"
+            type: "to"
+          ]
+          attachments: [
+            type: "text/csv"
+            name: "wishlist.csv"
+            content: res
+          ]
+        async = false
+        mandrill_client.messages.send
+          message: message
+          async: async
+        , ((result) ->
+          msg.send "Email sent!"
+          console.log result
+          return
+        ), (e) ->
+          # Mandrill returns the error as an object with name and message keys
+          console.log "A mandrill error occurred: " + e.name + " - " + e.message
+          return
+
+  robot.respond /users promo (.+)/i, (msg) ->
+    if msg.match[1] != "17" && msg.match[1] != "9"
+      msg.send "Nope."
       return
-    ), (e) ->
-      # Mandrill returns the error as an object with name and message keys
-      console.log "A mandrill error occurred: " + e.name + " - " + e.message
-      return
+    msg.send "Let me fetch the data..."
+    pm_url = process.env.PM_USERS_PROMO + msg.match[1]
+
+    msg.http(pm_url)
+      .get() (err, res, body) ->
+        json = JSON.parse(body)
+        res = json.res
+        msg.send "Got it! An email should arrive shortly."
+        mandrill = require 'mandrill-api/mandrill'
+        mandrill_client = new mandrill.Mandrill(process.env.MANDRILL_APIKEY)
+        message =
+          html: "<p>Here are the users who ordered promo #{msg.match[1]}.</p>"
+          subject: "Users promo #{msg.match[1]}"
+          from_email: "no-reply-to-Jacques@hipchat.com"
+          from_name: "Jacques Bot"
+          to: [
+            email: "elniafron62@gmail.com"
+            name: "Julien Capron"
+            type: "to"
+          ]
+          attachments: [
+            type: "text/csv"
+            name: "users_promo.csv"
+            content: res
+          ]
+        async = false
+        mandrill_client.messages.send
+          message: message
+          async: async
+        , ((result) ->
+          msg.send "Email sent!"
+          console.log result
+          return
+        ), (e) ->
+          # Mandrill returns the error as an object with name and message keys
+          console.log "A mandrill error occurred: " + e.name + " - " + e.message
+          return
+
+  robot.respond /current users/i, (msg) ->
+    pm_url = process.env.PM_CURRENT_USERS
+    msg.send "Let me count..."
+    msg.send "1... 2..."
+    msg.http(pm_url)
+      .get() (err, res, body) ->
+        json = JSON.parse(body)
+        res = json.res
+
+        msg.send "There are #{numberWithCommas(res)} pinchers on the site."
