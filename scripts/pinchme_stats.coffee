@@ -26,7 +26,7 @@
 
 module.exports = (robot) ->
   pm_access_token = process.env.HUBOT_PINCHME_API_TOKEN
-  pm_base_url = "https://www.pinchme.com/api/v1/"
+  pm_base_url = process.env.PM_BASE_URL
 
   numberWithCommas = (x) ->
     x.toString().replace /\B(?=(\d{3})+(?!\d))/g, ","
@@ -201,7 +201,8 @@ module.exports = (robot) ->
   robot.respond /wishlist breakdown/i, (msg) ->
     email = getEmailFromUser(msg.message.user.name)
     msg.send "Let me fetch the data..."
-    pm_url = process.env.PM_WISHLIST
+    pm_url = pm_base_url + "jacques/wishlist_breakdown?access_token=" + pm_access_token
+
     msg.http(pm_url)
       .get() (err, res, body) ->
         json = JSON.parse(body)
@@ -244,7 +245,7 @@ module.exports = (robot) ->
       return
     email = getEmailFromUser(msg.message.user.name)
     msg.send "Let me fetch the data..."
-    pm_url = process.env.PM_USERS_PROMO + msg.match[1]
+    pm_url = pm_base_url + "jacques/users_promo?access_token=" + pm_access_token + "&promo_id=" + msg.match[1]
 
     msg.http(pm_url)
       .get() (err, res, body) ->
@@ -282,7 +283,7 @@ module.exports = (robot) ->
           return
 
   robot.respond /current users/i, (msg) ->
-    pm_url = process.env.PM_CURRENT_USERS
+    pm_url = pm_base_url + "jacques/current_users?access_token=" + pm_access_token
     msg.send "Let me count..."
     msg.send "1... 2..."
     msg.http(pm_url)
