@@ -212,7 +212,7 @@ module.exports = (robot) ->
           from_email: "no-reply-to-Jacques@hipchat.com"
           from_name: "Jacques Bot"
           to: [
-            email: "elniafron62@gmail.com"
+            email: "jcapron@pinch.me"
             name: "Julien Capron"
             type: "to"
           ]
@@ -254,7 +254,7 @@ module.exports = (robot) ->
           from_email: "no-reply-to-Jacques@hipchat.com"
           from_name: "Jacques Bot"
           to: [
-            email: "elniafron62@gmail.com"
+            email: "jcapron@pinch.me"
             name: "Julien Capron"
             type: "to"
           ]
