@@ -54,7 +54,7 @@ module.exports = (robot) ->
     switch room
       when "pinchme" then room = "PINCHme+Tech+Team"
       when "pinchme_us" then room = "PINCHme+US"
-      when "frère_jacques" then room = "Fr%E8re+Jacques"
+      when "fr\u00e8re_jacques" then room = "Fr%E8re+Jacques"
     exec "curl -X POST --data 'auth_token=#{hipchat_token}&room_id=#{room}&from=Jacques&message_format=html&message=#{message}' https://api.hipchat.com/v1/rooms/message", puts
 
   robot.respond /how many users/i, (msg) ->
