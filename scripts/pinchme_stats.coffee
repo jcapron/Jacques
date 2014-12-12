@@ -57,6 +57,37 @@ module.exports = (robot) ->
       when "frere_jacques" then room = "Frere+Jacques"
     exec "curl -X POST --data 'auth_token=#{hipchat_token}&room_id=#{room}&from=Jacques&message_format=html&message=#{message}' https://api.hipchat.com/v1/rooms/message", puts
 
+  emailThis = (content, subject, name, file) ->
+    email = getEmailFromUser(name)
+    mandrill = require 'mandrill-api/mandrill'
+    mandrill_client = new mandrill.Mandrill(process.env.MANDRILL_APIKEY)
+    message =
+      html: content
+      subject: subject
+      from_email: "no-reply-to-Jacques@hipchat.com"
+      from_name: "Jacques Bot"
+      to: [
+        email: email
+        name: name
+        type: "to"
+      ]
+      attachments: [
+        type: "text/csv"
+        name: subject + ".csv"
+        content: file
+      ]
+    async = false
+    mandrill_client.messages.send
+      message: message
+      async: async
+    , ((result) ->
+      console.log result
+      return 1
+    ), (e) ->
+      # Mandrill returns the error as an object with name and message keys
+      console.log "A mandrill error occurred: " + e.name + " - " + e.message
+      return
+
   robot.respond /how many users/i, (msg) ->
     pm_url = pm_base_url + "users/population?access_token=" + pm_access_token
     msg.http(pm_url)
@@ -200,7 +231,6 @@ module.exports = (robot) ->
     name[0].toLowerCase() + name.split(" ")[1].toLowerCase() + "@pinch.me"
 
   robot.respond /wishlist breakdown/i, (msg) ->
-    email = getEmailFromUser(msg.message.user.name)
     msg.send "Let me fetch the data..."
     pm_url = pm_base_url + "jacques/wishlist_breakdown?access_token=" + pm_access_token
 
@@ -210,41 +240,17 @@ module.exports = (robot) ->
         res = json.res
 
         msg.send "Got it! An email should arrive shortly."
-        mandrill = require 'mandrill-api/mandrill'
-        mandrill_client = new mandrill.Mandrill(process.env.MANDRILL_APIKEY)
-        message =
-          html: "<p>Here is the wishlist breakdown.</p>"
-          subject: "Wishlist breakdown"
-          from_email: "no-reply-to-Jacques@hipchat.com"
-          from_name: "Jacques Bot"
-          to: [
-            email: email
-            name: msg.message.user.name
-            type: "to"
-          ]
-          attachments: [
-            type: "text/csv"
-            name: "wishlist.csv"
-            content: res
-          ]
-        async = false
-        mandrill_client.messages.send
-          message: message
-          async: async
-        , ((result) ->
+        content = "<p>Here is the wishlist breakdown.</p>"
+        subject = "Wishlist breakdown"
+        success = emailThis(content, subject, msg.message.user.name, res)
+        if success == 1
           msg.send "Email sent!"
-          console.log result
-          return
-        ), (e) ->
-          # Mandrill returns the error as an object with name and message keys
-          console.log "A mandrill error occurred: " + e.name + " - " + e.message
           return
 
   robot.respond /users promo (.+)/i, (msg) ->
     if msg.match[1] != "17" && msg.match[1] != "9"
       msg.send "Nope. It works only with 9 and 17 for now!"
       return
-    email = getEmailFromUser(msg.message.user.name)
     msg.send "Let me fetch the data..."
     pm_url = pm_base_url + "jacques/users_promo?access_token=" + pm_access_token + "&promo_id=" + msg.match[1]
 
@@ -253,34 +259,11 @@ module.exports = (robot) ->
         json = JSON.parse(body)
         res = json.res
         msg.send "Got it! An email should arrive shortly."
-        mandrill = require 'mandrill-api/mandrill'
-        mandrill_client = new mandrill.Mandrill(process.env.MANDRILL_APIKEY)
-        message =
-          html: "<p>Here are the users who ordered promo #{msg.match[1]}.</p>"
-          subject: "Users promo #{msg.match[1]}"
-          from_email: "no-reply-to-Jacques@hipchat.com"
-          from_name: "Jacques Bot"
-          to: [
-            email: email
-            name: msg.message.user.name
-            type: "to"
-          ]
-          attachments: [
-            type: "text/csv"
-            name: "users_promo.csv"
-            content: res
-          ]
-        async = false
-        mandrill_client.messages.send
-          message: message
-          async: async
-        , ((result) ->
+        content = "<p>Here are the users who ordered promo #{msg.match[1]}.</p>"
+        subject = "Users promo #{msg.match[1]}"
+        emailThis(content, subject, msg.message.user.name, res)
+        if success == 1
           msg.send "Email sent!"
-          console.log result
-          return
-        ), (e) ->
-          # Mandrill returns the error as an object with name and message keys
-          console.log "A mandrill error occurred: " + e.name + " - " + e.message
           return
 
   robot.respond /current users/i, (msg) ->
@@ -293,3 +276,20 @@ module.exports = (robot) ->
         res = json.res
 
         msg.send "There are #{numberWithCommas(res)} pinchers on the site."
+
+  robot.respond /advanced profile stats/i, (msg) ->
+    msg.send "Let me fetch the data..."
+    pm_url = pm_base_url + "jacques/advanced_profile_stats?access_token=" + pm_access_token
+
+    msg.http(pm_url)
+      .get() (err, res, body) ->
+        json = JSON.parse(body)
+        file = json.file
+
+        msg.send "Got it! An email should arrive shortly."
+        content = json.content.replace(/\n/g, "<br/>").replace(/"/g, "").replace(/,/g, ": ")
+        subject = "Advanced profile stats"
+        success = emailThis(content, subject, msg.message.user.name, file)
+        if success == 1
+          msg.send "Email sent!"
+          return
