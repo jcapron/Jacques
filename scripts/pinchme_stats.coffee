@@ -261,7 +261,7 @@ module.exports = (robot) ->
         msg.send "Got it! An email should arrive shortly."
         content = "<p>Here are the users who ordered promo #{msg.match[1]}.</p>"
         subject = "Users promo #{msg.match[1]}"
-        emailThis(content, subject, msg.message.user.name, res)
+        success = emailThis(content, subject, msg.message.user.name, res)
         if success == 1
           msg.send "Email sent!"
           return
