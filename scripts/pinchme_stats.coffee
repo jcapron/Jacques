@@ -287,7 +287,7 @@ module.exports = (robot) ->
         file = json.file
 
         msg.send "Got it! An email should arrive shortly."
-        content = json.content.replace(/\n/g, "<br/>").replace(/"/g, "").replace(/,/g, ": ")
+        content = json.content.replace(/\n/g, "<br/>").replace(/",/g, "\": ").replace(/"/g, "")
         subject = "Advanced profile stats"
         success = emailThis(content, subject, msg.message.user.name, file)
         if success == 1
