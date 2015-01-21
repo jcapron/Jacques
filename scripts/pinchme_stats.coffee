@@ -89,7 +89,7 @@ module.exports = (robot) ->
       return
 
   robot.respond /how many users/i, (msg) ->
-    pm_url = pm_base_url + "users/population?access_token=" + pm_access_token
+    pm_url = pm_base_url + "users/total_active_users?access_token=" + pm_access_token
     msg.http(pm_url)
       .get() (err, res, body) ->
         total = JSON.parse(body).number
